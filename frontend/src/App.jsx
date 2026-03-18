@@ -14,6 +14,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Favorites from './pages/Favorites';
 import AIAssistant from './pages/AIAssistant';
+import AdminDashboard from './pages/AdminDashboard';
 import { ChatBubbleLeftRightIcon } from '@heroicons/react/24/outline';
 
 // Protected Route Component
@@ -40,23 +41,25 @@ function AppContent() {
   const [prevAuth, setPrevAuth] = useState(isAuthenticated);
 
   const isChatPage = location.pathname === '/chat' && isAuthenticated;
+  const isAdminPage = location.pathname.startsWith('/admin');
 
   // Strict Home-First Redirection Logic
   useEffect(() => {
     // If user just logged in and isn't on the Home page, force them there
-    if (!prevAuth && isAuthenticated && location.pathname !== '/') {
+    if (!prevAuth && isAuthenticated && location.pathname !== '/' && !isAdminPage) {
       navigate('/', { replace: true });
     }
     setPrevAuth(isAuthenticated);
-  }, [isAuthenticated, location.pathname, navigate, prevAuth]);
+  }, [isAuthenticated, location.pathname, navigate, prevAuth, isAdminPage]);
 
   return (
     <div className="min-h-screen w-screen flex flex-col bg-white selection:bg-olive-100 selection:text-olive-900 relative">
-      {!isChatPage && <Navbar />}
-      <main className={`flex-grow relative flex flex-col ${isChatPage ? 'pt-0' : 'pt-[50px] md:pt-[70px]'}`}>
+      {!isChatPage && !isAdminPage && <Navbar />}
+      <main className={`flex-grow relative flex flex-col ${isChatPage || isAdminPage ? 'pt-0' : 'pt-[50px] md:pt-[70px]'}`}>
         <div className="flex-grow">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route
@@ -109,10 +112,10 @@ function AppContent() {
             />
           </Routes>
         </div>
-        {!isChatPage && <Footer />}
+        {!isChatPage && !isAdminPage && <Footer />}
       </main>
 
-      {!isChatPage && (
+      {!isChatPage && !isAdminPage && (
         <Link
           to="/chat"
           className="fixed bottom-6 md:bottom-8 right-6 md:right-8 z-[100] w-14 h-14 md:w-16 md:h-16 bg-[#556B2F] text-white rounded-[1.8rem] md:rounded-[2rem] shadow-[0_20px_50px_-10px_rgba(245,185,153,0.5)] flex items-center justify-center hover:scale-110 hover:rotate-6 active:scale-95 transition-all group"

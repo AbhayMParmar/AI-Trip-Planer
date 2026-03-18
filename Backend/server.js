@@ -47,6 +47,7 @@ app.use('/api/trips', require('./routes/tripRoutes'));
 app.use('/api/recommendations', require('./routes/recommendationRoutes'));
 app.use('/api/favorites', require('./routes/favoriteRoutes'));
 app.use('/api/chatbot', require('./routes/chatbotRoutes'));
+app.use('/api/admin', require('./routes/adminRoutes'));
 console.log('Routes loaded.');
 
 module.exports = app;
