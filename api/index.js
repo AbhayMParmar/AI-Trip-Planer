@@ -1,3 +1,7 @@
+// Entry point for Vercel Serverless Functions
 const app = require('../Backend/server');
 
-module.exports = app;
+// This handler ensures that Express receives the full request details
+module.exports = (req, res) => {
+    return app(req, res);
+};
