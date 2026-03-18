@@ -77,6 +77,7 @@ export default function Navbar() {
         { name: 'Explore', path: '/', icon: GlobeAltIcon },
         { name: 'Planner', path: '/planner', icon: PlusIcon },
         { name: 'History', path: '/history', icon: ClockIcon },
+        { name: 'Saved', path: '/favorites', icon: BookmarkIcon },
         { name: 'Chat', path: '/chat', icon: ChatBubbleLeftRightIcon }
     ];
 

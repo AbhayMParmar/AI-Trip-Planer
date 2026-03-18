@@ -317,25 +317,27 @@ export default function TripDetails() {
                                         <PaperAirplaneIcon className="w-4 h-4 text-[#556B2F] rotate-45" />
                                         Logistics
                                     </button>
-
-                                    {/* Premium Heart Type Button for Saving Trip */}
+                                     {/* Premium Heart Type Button for Saving Trip */}
                                     <motion.button
                                         onClick={toggleSaveTrip}
                                         disabled={saving}
-                                        whileHover={{ scale: 1.1 }}
-                                        whileTap={{ scale: 0.9 }}
-                                        className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-500 shadow-xl ${
+                                        whileHover={{ scale: 1.02 }}
+                                        whileTap={{ scale: 0.98 }}
+                                        className={`px-5 py-3 rounded-[1.2rem] flex items-center justify-center gap-2.5 transition-all duration-500 shadow-xl ${
                                             trip?.isFavorite 
-                                                ? 'bg-red-50 text-red-500 border border-red-100 shadow-red-100' 
-                                                : 'bg-white text-slate-400 border border-slate-100 hover:border-red-200 hover:text-red-400 shadow-slate-100'
+                                                ? 'bg-red-50 text-red-500 border border-red-100 shadow-red-100 flex-1 lg:flex-none' 
+                                                : 'bg-[#556B2F] text-white border border-[#556B2F] hover:bg-black hover:border-black shadow-slate-100 flex-1 lg:flex-none'
                                         }`}
                                         title={trip?.isFavorite ? 'Remove from Favorites' : 'Add to Favorites'}
                                     >
                                         {trip?.isFavorite ? (
-                                            <HeartIconSolid className="w-6 h-6 animate-heart-pop" />
+                                            <HeartIconSolid className="w-5 h-5 animate-heart-pop" />
                                         ) : (
-                                            <HeartIcon className={`w-6 h-6 ${saving ? 'animate-pulse' : ''}`} />
+                                            <HeartIcon className={`w-5 h-5 ${saving ? 'animate-pulse' : ''}`} />
                                         )}
+                                        <span className="text-[10px] font-black uppercase tracking-widest">
+                                            {trip?.isFavorite ? 'In Vault' : 'Save Plan'}
+                                        </span>
                                         <style dangerouslySetInnerHTML={{ __html: `
                                             @keyframes heart-pop {
                                                 0% { transform: scale(1); }
@@ -345,6 +347,7 @@ export default function TripDetails() {
                                             .animate-heart-pop { animation: heart-pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
                                         `}} />
                                     </motion.button>
+
                                 </div>
                             </div>
 
@@ -355,7 +358,9 @@ export default function TripDetails() {
                                         <BanknotesIcon className="w-5 h-5" />
                                     </div>
                                     <div>
-                                        <p className="text-[8px] font-black uppercase tracking-widest text-[#0D2D2D]/30">Budget</p>
+                                        <p className="text-[8px] font-black uppercase tracking-widest text-[#0D2D2D]/30">
+                                            {trip.budgetLevel || 'Budget Estimate'}
+                                        </p>
                                         <p className="text-lg font-black text-[#0D2D2D]">₹{formatINR(trip.totalEstimatedCost)}</p>
                                     </div>
                                 </div>

@@ -121,6 +121,7 @@ export default function TripPlanner() {
                     transport: selectedTransport,
                     style: selectedStyle,
                     interests: selectedExperiences,
+                    budget: '',
                     travelers: { adults: parseInt(data.adults), children: parseInt(data.children) || 0 },
                     module: selectedStyle === 'luxury' ? 'sanctuary' : 'expedition'
                 })
@@ -361,7 +362,7 @@ export default function TripPlanner() {
                             </div>
                         </div>
 
-                        <div className="lg:col-span-4 bg-gray-900 p-8 rounded-[3rem] text-white flex flex-col justify-between h-full min-h-[300px] relative overflow-hidden">
+                        <div className="lg:col-span-12 bg-gray-900 p-8 rounded-[3rem] text-white flex flex-col justify-between h-full min-h-[300px] relative overflow-hidden mt-8 lg:mt-0">
                             <div className="absolute top-0 right-0 w-32 h-32 bg-olive-500/10 rounded-full blur-3xl -mr-10 -mt-10" />
                             <div className="relative">
                                 <h3 className="text-xs font-black text-olive-500 uppercase tracking-[0.3em] mb-8">Summary Metrics</h3>
@@ -380,7 +381,7 @@ export default function TripPlanner() {
                                     type="submit"
                                     className="mt-8 py-5 bg-gradient-to-r from-olive-500 to-red-500 text-white rounded-2xl font-black text-lg uppercase tracking-widest shadow-xl shadow-red-500/20 flex items-center justify-center gap-3 transition-all active:scale-95"
                                 >
-                                    Generate Mission
+                                    Plan My Trip
                                     <SparklesIcon className="w-5 h-5" />
                                 </button>
                         </div>

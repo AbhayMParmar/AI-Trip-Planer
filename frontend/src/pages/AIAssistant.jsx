@@ -71,10 +71,17 @@ export default function AIAssistant() {
     // History & Session Management
     const [sessions, setSessions] = useState([]);
     const [activeSessionId, setActiveSessionId] = useState(null);
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
     const [sidebarOpen, setSidebarOpen] = useState(() => {
         const saved = localStorage.getItem(`ai_chat_sidebar_open_${user?.uid || 'guest'}`);
-        return saved !== null ? JSON.parse(saved) : true;
+        return saved !== null ? JSON.parse(saved) : (window.innerWidth >= 1024);
     });
+
+    useEffect(() => {
+        const handleResize = () => setWindowWidth(window.innerWidth);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     useEffect(() => {
         const loadSessionsFromFirestore = async () => {
@@ -274,11 +281,29 @@ export default function AIAssistant() {
 
     return (
         <div className="h-screen w-screen flex bg-[#FBFCFE] overflow-hidden relative">
+            {/* Sidebar Backdrop (Mobile Only) */}
+            <AnimatePresence>
+                {sidebarOpen && windowWidth < 768 && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={() => setSidebarOpen(false)}
+                        className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[210]"
+                    />
+                )}
+            </AnimatePresence>
+
             {/* History Sidebar */}
             <motion.aside
                 initial={false}
-                animate={{ width: sidebarOpen ? (window.innerWidth < 768 ? '100%' : (isFold5 ? '260px' : '320px')) : '0px' }}
-                className={`fixed md:relative z-[200] h-full zf-sidebar-width bg-white/80 backdrop-blur-3xl border-r border-slate-200/60 flex flex-col overflow-hidden transition-all duration-300 ${!sidebarOpen && 'border-none'}`}
+                animate={{ 
+                    x: sidebarOpen ? 0 : (windowWidth < 768 ? -280 : 0),
+                    width: sidebarOpen ? (windowWidth < 768 ? '280px' : (isFold5 ? '260px' : '320px')) : '0px',
+                    opacity: sidebarOpen ? 1 : 0
+                }}
+                transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                className={`fixed md:relative z-[220] h-full bg-white/95 backdrop-blur-3xl border-r border-slate-200/60 flex flex-col overflow-hidden transition-all duration-300 ${!sidebarOpen && windowWidth < 768 ? 'pointer-events-none' : ''}`}
             >
                 <div className="p-6 border-b border-slate-100 flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -369,8 +394,8 @@ export default function AIAssistant() {
                 <div className="absolute bottom-[-5%] left-[-5%] w-[500px] h-[500px] bg-slate-500/5 rounded-full blur-[100px]" />
             </div>
 
-            <header className="px-3 md:px-6 py-1.5 md:py-2 relative z-[100]">
-                <nav className="max-w-[1400px] mx-auto flex items-center justify-between px-4 md:px-7 py-2 md:py-3 rounded-[1.8rem] md:rounded-[2.5rem] border bg-white/40 backdrop-blur-3xl border-white/30 shadow-sm transition-all duration-500 hover:shadow-[0_8px_32px_rgba(0,0,0,0.08)] hover:bg-white/60 hover:border-white/50 group/nav">
+            <header className="px-3 md:px-6 py-1.5 md:py-3 relative z-[100]">
+                <nav className="max-w-[1400px] mx-auto flex items-center justify-between px-3 md:px-7 py-2 md:py-3 rounded-2xl md:rounded-[2.5rem] border bg-white/40 backdrop-blur-3xl border-white/30 shadow-sm transition-all duration-500 hover:shadow-[0_8px_32px_rgba(0,0,0,0.08)] hover:bg-white/60 hover:border-white/50 group/nav">
                     <div className="flex items-center gap-2 md:gap-6 w-full md:w-auto">
 
                         
@@ -397,7 +422,7 @@ export default function AIAssistant() {
                                 />
                                 <div className="absolute inset-0 bg-slate-900 rounded-xl md:rounded-2xl flex items-center justify-center shadow-2xl group-hover:-translate-y-1 transition-all duration-500 overflow-hidden">
                                     <AnimatePresence mode="wait">
-                                        {isLogoHovered && !sidebarOpen ? (
+                                        {(isLogoHovered || (!sidebarOpen && windowWidth < 768)) ? (
                                             <motion.div
                                                 key="toggle-icon"
                                                 initial={{ opacity: 0, scale: 0.8, rotate: -20 }}
@@ -435,13 +460,13 @@ export default function AIAssistant() {
                                 )}
                             </div>
                             <div className="overflow-hidden">
-                                <h2 className="text-xs md:text-xl font-[1000] text-slate-900 tracking-tighter flex items-center gap-1.5 md:gap-2 uppercase whitespace-nowrap group-hover:text-[#556B2F] transition-colors">
-                                    Neural <span className="text-[#556B2F] italic group-hover:text-slate-900 transition-colors">Concierge</span>
+                                <h2 className="text-sm md:text-xl font-[1000] text-slate-900 tracking-tighter flex items-center gap-1.5 md:gap-2 uppercase whitespace-nowrap group-hover:text-[#556B2F] transition-colors">
+                                    <span className="hidden xs:inline">Neural</span> <span className="text-[#556B2F] italic group-hover:text-slate-900 transition-colors">Concierge</span>
                                     <span className="px-1.5 md:px-2.5 py-0.5 md:py-1 rounded-lg bg-[#556B2F]/10 text-[#556B2F] text-[7px] md:text-[9px] tracking-[0.2em] md:tracking-[0.3em] font-black border border-[#556B2F]/20">V5.0</span>
                                 </h2>
                                 <div className="flex items-center gap-1.5 md:gap-2">
                                     <div className="w-1 h-1 md:w-1.5 md:h-1.5 rounded-full bg-[#556B2F] animate-pulse" />
-                                    <p className="text-[8px] md:text-[9px] text-slate-400 font-bold uppercase tracking-[0.1em] md:tracking-[0.2em] truncate">
+                                    <p className="text-[7px] md:text-[9px] text-slate-400 font-bold uppercase tracking-[0.1em] md:tracking-[0.2em] truncate">
                                         {selectedModel.includes('Gemini') ? 'Gemini 2.5 Active' : 'Llama 3 Active'}
                                     </p>
                                 </div>
@@ -482,8 +507,8 @@ export default function AIAssistant() {
                                         <ChatBubbleLeftRightIcon className="w-6 h-6 md:w-8 md:h-8 text-[#556B2F] group-hover:scale-110 transition-transform" />
                                     </div>
                                     <div className="space-y-1 md:space-y-2">
-                                        <h1 className="text-3xl md:text-6xl font-[1000] text-slate-900 tracking-tighter leading-none">
-                                            Initiate <span className="text-[#556B2F] italic block sm:inline">Deep Intelligence</span>
+                                        <h1 className="text-2xl xs:text-3xl md:text-6xl font-[1000] text-slate-900 tracking-tighter leading-none">
+                                            Initiate <span className="text-[#556B2F] italic block">Deep Intelligence</span>
                                         </h1>
                                         <p className="text-slate-400 font-black text-[8px] md:text-[10px] uppercase tracking-[0.4em] md:tracking-[0.5em] pt-1 md:pt-2">
                                             The Neural Core of Future Expeditions
@@ -491,7 +516,7 @@ export default function AIAssistant() {
                                     </div>
                                 </div>
 
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-2xl px-2 pb-24 md:pb-20">
+                                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 w-full max-w-[1400px] px-2 md:px-0 pb-24 md:pb-20">
                                     {[
                                         "Architect a 7-day immersion in Japanese culture.",
                                         "Reveal the encrypted hidden gems of Lisbon.",
@@ -513,52 +538,52 @@ export default function AIAssistant() {
                                         key={i}
                                         initial={{ opacity: 0, y: 30 }}
                                         animate={{ opacity: 1, y: 0 }}
-                                        className={`flex gap-4 md:gap-8 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}
+                                        className={`flex gap-2.5 md:gap-8 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}
                                     >
-                                        <div className={`w-12 h-12 md:w-16 md:h-16 rounded-2xl md:rounded-[2rem] flex-shrink-0 flex items-center justify-center shadow-2xl transition-all group ${msg.role === 'user' ? 'bg-slate-900 text-white shadow-slate-900/10' : 'bg-slate-900 text-[#556B2F] shadow-slate-900/10'}`}>
+                                        <div className={`w-9 h-9 md:w-16 md:h-16 rounded-xl md:rounded-[2rem] flex-shrink-0 flex items-center justify-center shadow-2xl transition-all group ${msg.role === 'user' ? 'bg-slate-900 text-white shadow-slate-900/10' : 'bg-slate-900 text-[#556B2F] shadow-slate-900/10'}`}>
                                             {msg.role === 'user' ? (
-                                                <span className="text-lg font-black uppercase text-white group-hover:scale-110 transition-transform">{user?.name?.charAt(0)}</span>
+                                                <span className="text-sm md:text-lg font-black uppercase text-white group-hover:scale-110 transition-transform">{user?.name?.charAt(0)}</span>
                                             ) : (
-                                                <SparklesIcon className="w-6 h-6 md:w-9 md:h-9 group-hover:rotate-12 transition-transform" />
+                                                <SparklesIcon className="w-5 h-5 md:w-9 md:h-9 group-hover:rotate-12 transition-transform" />
                                             )}
                                         </div>
-                                        <div className={`flex-1 space-y-3 max-w-[85%] ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
-                                            <div className="flex items-center gap-3 mb-1 px-2">
-                                                <span className={`text-[9px] font-black uppercase tracking-[0.4em] ${msg.role === 'user' ? 'text-[#556B2F]' : 'text-slate-400'}`}>
+                                        <div className={`flex-1 space-y-2 md:space-y-3 max-w-[85%] ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
+                                            <div className="flex items-center gap-2 md:gap-3 mb-0.5 md:mb-1 px-1 md:px-2">
+                                                <span className={`text-[8px] md:text-[9px] font-black uppercase tracking-[0.3em] md:tracking-[0.4em] ${msg.role === 'user' ? 'text-[#556B2F]' : 'text-slate-400'}`}>
                                                     {msg.role === 'user' ? 'Protocol Explorer' : 'Neural Core'}
                                                 </span>
                                             </div>
-                                            <div className={`p-4 md:p-8 rounded-2xl md:rounded-[3rem] text-xs md:text-lg leading-relaxed font-[700] shadow-[0_10px_40px_-15px_rgba(0,0,0,0.03)] inline-block text-left transition-all zf-bubble-compact ${msg.role === 'user'
+                                            <div className={`p-3.5 md:p-8 rounded-2xl md:rounded-[3rem] shadow-[0_10px_40px_-15px_rgba(0,0,0,0.03)] inline-block text-left transition-all zf-bubble-compact ${msg.role === 'user'
                                                 ? 'bg-slate-900 text-white rounded-tr-none border border-slate-900 shadow-xl'
                                                 : 'bg-white text-slate-900 rounded-tl-none border border-slate-100 whitespace-pre-wrap'
                                                 }`}>
                                                 {msg.file && (
-                                                    <div className="mb-4 overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 p-1.5 ring-4 ring-slate-100/50">
+                                                    <div className="mb-3 md:mb-4 overflow-hidden rounded-xl md:rounded-2xl border border-slate-200 bg-slate-50 p-1 md:p-1.5 ring-4 ring-slate-100/50">
                                                         {msg.file.type.startsWith('image/') ? (
-                                                            <img src={msg.file.data} alt="uploaded" className="max-h-60 rounded-xl object-cover" />
+                                                            <img src={msg.file.data} alt="uploaded" className="max-h-48 md:max-h-60 rounded-lg md:rounded-xl object-cover" />
                                                         ) : (
-                                                            <div className="flex items-center gap-3 p-4 bg-white text-slate-800 rounded-xl">
-                                                                <DocumentIcon className="w-7 h-7 text-olive-600" />
-                                                                <span className="text-[10px] font-black uppercase tracking-widest truncate max-w-[200px]">{msg.file.name}</span>
+                                                            <div className="flex items-center gap-2 md:gap-3 p-3 md:p-4 bg-white text-slate-800 rounded-lg md:rounded-xl">
+                                                                <DocumentIcon className="w-5 h-5 md:w-7 md:h-7 text-olive-600" />
+                                                                <span className="text-[9px] md:text-[10px] font-black uppercase tracking-widest truncate max-w-[150px] md:max-w-[200px]">{msg.file.name}</span>
                                                             </div>
                                                         )}
                                                     </div>
                                                 )}
-                                                {msg.content}
+                                                <p className="text-xs md:text-lg leading-relaxed font-[700]">{msg.content}</p>
                                             </div>
                                         </div>
                                     </motion.div>
                                 ))}
                                 {isLoading && (
                                     <div className="flex gap-8">
-                                        <div className="w-16 h-16 rounded-[2rem] flex-shrink-0 flex items-center justify-center bg-slate-900 shadow-2xl">
-                                            <ArrowPathIcon className="w-9 h-9 text-[#556B2F] animate-spin" />
+                                        <div className="w-9 h-9 md:w-16 md:h-16 rounded-xl md:rounded-[2rem] flex-shrink-0 flex items-center justify-center bg-slate-900 shadow-2xl">
+                                            <ArrowPathIcon className="w-5 h-5 md:w-9 md:h-9 text-[#556B2F] animate-spin" />
                                         </div>
                                         <div className="flex-1 flex items-center">
-                                            <div className="flex gap-2.5 p-8 bg-white/50 backdrop-blur-md rounded-[3rem] border border-slate-100 shadow-sm">
-                                                <div className="w-3 h-3 bg-slate-900 rounded-full animate-bounce [animation-duration:800ms]" />
-                                                <div className="w-3 h-3 bg-slate-900 rounded-full animate-bounce [animation-duration:800ms] [animation-delay:200ms]" />
-                                                <div className="w-3 h-3 bg-slate-900 rounded-full animate-bounce [animation-duration:800ms] [animation-delay:400ms]" />
+                                            <div className="flex gap-1.5 md:gap-2 p-3.5 md:p-8 bg-white/50 backdrop-blur-md rounded-2xl md:rounded-[3rem] border border-slate-100 shadow-sm">
+                                                <div className="w-2 md:w-3 h-2 md:h-3 bg-slate-900 rounded-full animate-bounce [animation-duration:800ms]" />
+                                                <div className="w-2 md:w-3 h-2 md:h-3 bg-slate-900 rounded-full animate-bounce [animation-duration:800ms] [animation-delay:200ms]" />
+                                                <div className="w-2 md:w-3 h-2 md:h-3 bg-slate-900 rounded-full animate-bounce [animation-duration:800ms] [animation-delay:400ms]" />
                                             </div>
                                         </div>
                                     </div>
@@ -578,16 +603,16 @@ export default function AIAssistant() {
                                 initial={{ opacity: 0, y: 10, scale: 0.95 }}
                                 animate={{ opacity: 1, y: 0, scale: 1 }}
                                 exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                                className="absolute bottom-full mb-6 left-0 w-80 bg-slate-900 rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-800 z-[1000] p-3"
+                                className="absolute bottom-full mb-4 left-0 w-[calc(100vw-2rem)] md:w-80 bg-slate-900 rounded-3xl md:rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-800 z-[1000] p-2 md:p-3"
                             >
-                                <div className="px-5 py-3 border-b border-slate-800 mb-2">
-                                    <p className="text-[9px] font-[1000] text-slate-500 uppercase tracking-[0.4em]">Processing Architecture</p>
+                                <div className="px-4 md:px-5 py-2 md:py-3 border-b border-slate-800 mb-1 md:mb-2">
+                                    <p className="text-[8px] md:text-[9px] font-[1000] text-slate-500 uppercase tracking-[0.4em]">Processing Architecture</p>
                                 </div>
                                 {models.map((m) => (
                                     <button
                                         key={m.name}
                                         onClick={() => { setSelectedModel(m.name); setShowModelMenu(false); }}
-                                        className={`w-full flex items-center justify-between px-5 py-4 rounded-[1.8rem] text-left transition-all ${selectedModel === m.name ? 'bg-white/10 text-white shadow-inner' : 'text-slate-400 hover:bg-white/5 hover:text-white'} text-[10px] font-black uppercase tracking-widest`}
+                                        className={`w-full flex items-center justify-between px-4 md:px-5 py-3 md:py-4 rounded-2xl md:rounded-[1.8rem] text-left transition-all ${selectedModel === m.name ? 'bg-white/10 text-white shadow-inner' : 'text-slate-400 hover:bg-white/5 hover:text-white'} text-[9px] md:text-[10px] font-black uppercase tracking-widest`}
                                     >
                                         <span>{m.name}</span>
                                         {selectedModel === m.name && <CheckIcon className="w-4 h-4 text-[#556B2F]" />}
@@ -641,7 +666,7 @@ export default function AIAssistant() {
                             onChange={handleFileChange}
                             accept="image/*,application/pdf,.doc,.docx,.txt"
                         />
-                        <div className="flex items-center gap-1 md:gap-1.5 pl-1 md:pl-3">
+                        <div className="flex items-center gap-1 md:gap-1.5 pl-0.5 md:pl-3">
                             <button
                                 type="button"
                                 onClick={() => fileInputRef.current.click()}
@@ -651,7 +676,7 @@ export default function AIAssistant() {
                                 <PlusIcon className="w-5 h-5 md:w-6 md:h-6 stroke-[3px]" />
                             </button>
 
-                            <div className="hidden xs:block h-6 w-px bg-slate-100 mx-1 md:mx-2" />
+                            <div className="hidden sm:block h-6 w-px bg-slate-100 mx-1 md:mx-2" />
 
                             <button
                                 type="button"
@@ -667,7 +692,7 @@ export default function AIAssistant() {
                         <input
                             type="text"
                             placeholder="Message..."
-                            className="flex-1 py-3 md:py-4 px-2 md:px-3 text-sm md:text-lg font-bold bg-transparent border-none focus:outline-none placeholder:text-slate-300 text-slate-900"
+                            className="flex-1 py-2.5 md:py-4 px-1.5 md:px-3 text-sm md:text-lg font-bold bg-transparent border-none focus:outline-none placeholder:text-slate-300 text-slate-900"
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
                         />
@@ -691,7 +716,7 @@ export default function AIAssistant() {
                             </button>
                         </div>
                     </form>
-                    <p className="hidden md:block text-[9px] text-center mt-4 text-slate-300 font-black uppercase tracking-[0.8em] opacity-30">
+                    <p className="hidden md:block text-[9px] text-center mt-4 text-slate-300 font-black uppercase tracking-[0.4em] lg:tracking-[0.8em] opacity-30">
                         Neural Concierge Interface • Synthesis Active
                     </p>
                 </div>

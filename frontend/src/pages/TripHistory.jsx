@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { collection, query, where, getDocs, deleteDoc, doc } from 'firebase/firestore';
+import { collection, query, where, getDocs, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
@@ -16,8 +16,10 @@ import {
     MagnifyingGlassIcon,
     PrinterIcon,
     BanknotesIcon,
-    GlobeAltIcon
+    GlobeAltIcon,
+    HeartIcon
 } from '@heroicons/react/24/outline';
+import { HeartIcon as HeartIconSolid } from '@heroicons/react/24/solid';
 import Footer from '../components/Footer';
 
 const containerVariants = {
@@ -77,6 +79,21 @@ export default function TripHistory() {
         }
     };
 
+    const toggleFavorite = async (id, currentStatus, e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        try {
+            await updateDoc(doc(db, 'trips', id), {
+                isFavorite: !currentStatus
+            });
+            setTrips(prev => prev.map(t => t._id === id ? { ...t, isFavorite: !currentStatus } : t));
+            toast.success(!currentStatus ? 'Added to Vault' : 'Removed from Vault');
+        } catch (error) {
+            console.error(error);
+            toast.error('Sync failed');
+        }
+    };
+
     const filteredTrips = Array.isArray(trips) ? trips.filter(trip => {
         if (!trip) return false;
         
@@ -103,7 +120,7 @@ export default function TripHistory() {
 
     return (
         <>
-            <div className="min-h-screen bg-[#FBFCFE] pt-12 md:pt-16 pb-20 px-4 sm:px-6 relative overflow-hidden">
+            <div className="min-h-screen bg-[#FBFCFE] pt-8 md:pt-12 pb-20 px-4 sm:px-6 relative overflow-hidden">
                 {/* Clean Background */}
                 <div className="fixed inset-0 pointer-events-none bg-[#FBFCFE]" />
 
@@ -205,12 +222,34 @@ export default function TripHistory() {
                                                 </div>
                                                 <div className="flex items-center gap-2">
                                                     <button
+                                                        onClick={(e) => toggleFavorite(trip._id, trip.isFavorite, e)}
+                                                        className={`p-3 rounded-2xl transition-all duration-500 shadow-sm ${
+                                                            trip.isFavorite 
+                                                                ? 'bg-red-50 text-red-500 border border-red-100' 
+                                                                : 'bg-slate-50 text-slate-300 hover:text-red-400 hover:bg-red-50 border border-transparent'
+                                                        }`}
+                                                    >
+                                                        {trip.isFavorite ? (
+                                                            <HeartIconSolid className="w-5 h-5 animate-heart-pop" />
+                                                        ) : (
+                                                            <HeartIcon className="w-5 h-5" />
+                                                        )}
+                                                    </button>
+                                                    <button
                                                         onClick={(e) => deleteTrip(trip._id, e)}
                                                         className="p-3 rounded-2xl bg-slate-50 text-slate-300 hover:text-red-500 hover:bg-red-50 transition-all group/delete"
                                                     >
                                                         <TrashIcon className="w-5 h-5 group-hover/delete:scale-110 transition-transform" />
                                                     </button>
                                                 </div>
+                                                <style dangerouslySetInnerHTML={{ __html: `
+                                                    @keyframes heart-pop {
+                                                        0% { transform: scale(1); }
+                                                        50% { transform: scale(1.3); }
+                                                        100% { transform: scale(1); }
+                                                    }
+                                                    .animate-heart-pop { animation: heart-pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+                                                `}} />
                                             </div>
 
                                             <div className="grid grid-cols-2 gap-3 mb-8">

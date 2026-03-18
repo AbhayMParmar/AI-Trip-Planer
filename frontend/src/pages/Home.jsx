@@ -80,7 +80,7 @@ export default function Home() {
           background: `radial-gradient(1000px circle at ${mousePos.x}px ${mousePos.y}px, rgba(245,185,153,0.06), transparent 80%)`
         }}
       />
-      <section className="relative min-h-fit lg:min-h-[calc(100vh-100px)] flex items-start pt-0 pb-12 md:pb-0 tb-gap-tight overflow-hidden">
+      <section className="relative min-h-fit lg:min-h-[calc(100vh-100px)] flex items-start pt-8 md:pt-0 pb-12 md:pb-0 tb-gap-tight overflow-hidden">
         {/* Abstract Dynamic Background Elements */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0 pointer-events-none">
           <motion.div 
@@ -107,54 +107,57 @@ export default function Home() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="flex flex-col items-center md:items-start text-center md:text-left lg:col-span-6 xl:col-span-5 zf-main-padding"
+            className="flex flex-col items-start text-left lg:col-span-6 xl:col-span-5 zf-main-padding"
           >
-            <div className="w-full flex flex-col items-start md:items-start text-left mb-8 md:mb-0 mt-[5px] relative">
-               <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-[75px] font-[900] tracking-[-0.04em] leading-[1.1] mb-6 relative zf-title-scale zf-title-mobile-scale tb-title-tight pr-14 sm:pr-24 md:pr-0">
-                 <span className="relative z-10">Design your</span> <br className="md:hidden tb-forced-break" />
-                 <span className="relative inline-block mt-2">
-                   <span className="relative z-10 text-transparent bg-clip-text bg-gradient-to-r from-olive-600 to-[#556B2F]">
-                     dream trip
-                   </span>
-                   <motion.span 
-                     initial={{ width: 0 }}
-                     animate={{ width: '100%' }}
-                     transition={{ delay: 0.5, duration: 1 }}
-                     className="absolute bottom-2 left-0 h-4 bg-olive-100/50 -z-10 rounded-lg hidden md:block"
-                   />
-                   <span className="absolute -inset-x-4 -inset-y-2 bg-olive-50 rounded-2xl -z-10 md:hidden border border-olive-100/50 shadow-sm" />
-                 </span> <br className="tb-forced-break" />
-                 in seconds.
-               </h1>
+            <div className="w-full mb-8 md:mb-0 mt-[5px]">
+               {/* Mobile/Tablet Header Row */}
+               <div className="flex flex-row items-start justify-between lg:block relative">
+                 <h1 className="flex-1 text-4xl sm:text-6xl md:text-7xl lg:text-[75px] font-[900] tracking-[-0.04em] leading-[1.1] mb-6 relative zf-title-scale zf-title-mobile-scale tb-title-tight pr-4 md:pr-0">
+                   <span className="relative z-10 whitespace-nowrap">Design your</span> <br className="md:hidden zf-forced-break" />
+                   <span className="relative inline-block mt-2">
+                     <span className="relative z-10 text-transparent bg-clip-text bg-gradient-to-r from-olive-600 to-[#556B2F] whitespace-nowrap">
+                       dream trip
+                     </span>
+                     <motion.span 
+                       initial={{ width: 0 }}
+                       animate={{ width: '100%' }}
+                       transition={{ delay: 0.5, duration: 1 }}
+                       className="absolute bottom-2 left-0 h-4 bg-olive-100/50 -z-10 rounded-lg hidden md:block"
+                     />
+                     <span className="absolute -inset-x-2 sm:-inset-x-4 -inset-y-2 bg-olive-50 rounded-2xl -z-10 md:hidden border border-olive-100/50 shadow-sm" />
+                   </span> <br className="md:hidden zf-forced-break" />
+                   <span className="relative z-10 whitespace-nowrap">in seconds.</span>
+                 </h1>
 
-               {/* Mobile/Tablet Floating Image */}
-               <div className="lg:hidden absolute right-[-10px] sm:right-[20px] top-[-5px] sm:top-[0px] pointer-events-none">
-                 <motion.div 
-                   initial={{ opacity: 0, scale: 0.8, rotate: 0 }}
-                   animate={{ opacity: 1, scale: 1, rotate: 6 }}
-                   transition={{ duration: 1, delay: 0.3 }}
-                   className="hero-img-mobile md:hero-img-tablet"
-                 >
-                   <img src={DESTINATION_IMAGES[0]} className="w-full h-full object-cover" alt="Paris" />
-                 </motion.div>
-                 
-                 <motion.div 
-                   initial={{ opacity: 0, x: 20 }}
-                   animate={{ opacity: 1, x: 0 }}
-                   transition={{ duration: 1, delay: 0.6 }}
-                   className="hero-img-circle hidden sm:block"
-                 >
-                   <img src={DESTINATION_IMAGES[1]} className="w-full h-full object-cover" alt="Dubai" />
-                 </motion.div>
+                 {/* Mobile/Tablet Image Collage - Fixed to the right of H1 */}
+                 <div className="lg:hidden w-32 sm:w-48 relative pt-4 select-none flex justify-center">
+                   <motion.div 
+                     initial={{ opacity: 0, scale: 0.8, rotate: 0 }}
+                     animate={{ opacity: 1, scale: 1, rotate: 6 }}
+                     transition={{ duration: 1, delay: 0.3 }}
+                     className="hero-img-mobile md:hero-img-tablet relative"
+                   >
+                     <img src={DESTINATION_IMAGES[0]} className="w-full h-full object-cover rounded-[1.25rem]" alt="Paris" />
+                     
+                     <motion.div 
+                       initial={{ opacity: 0, x: 20 }}
+                       animate={{ opacity: 1, x: 0 }}
+                       transition={{ duration: 1, delay: 0.6 }}
+                       className="hero-img-circle hidden xs:block"
+                     >
+                       <img src={DESTINATION_IMAGES[1]} className="w-full h-full object-cover" alt="Dubai" />
+                     </motion.div>
+                   </motion.div>
+                 </div>
                </div>
 
-               <p className="text-base md:text-lg text-gray-500 font-medium leading-relaxed max-w-lg mb-12 md:mb-4 md:block zf-desc-mobile-scale pr-16 sm:pr-24 md:pr-0 relative z-10">
+               <p className="text-base md:text-lg text-gray-500 font-medium leading-relaxed max-w-lg mb-12 md:mb-4 md:block zf-desc-mobile-scale md:pr-0 relative z-10">
                  Stop scrolling through endless tabs. Our AI curates perfect, personalized itineraries, stays, and dining experiences instantly.
                </p>
             </div>
 
-            {/* Centered Search Bar for Mobile */}
-            <div className="w-full max-w-[340px] sm:max-w-md md:max-w-none mx-auto md:ml-0">
+            {/* Left Aligned Search Bar for Mobile */}
+            <div className="w-full max-w-md md:max-w-none text-left ml-0">
                <form
                  onSubmit={handleQuickStart}
                  className="w-full relative group"
@@ -182,7 +185,7 @@ export default function Home() {
                  </div>
                </form>
             </div>
-            <div className="mt-4 md:mt-4 flex items-center gap-5 self-center md:self-start">
+            <div className="mt-4 md:mt-4 flex items-center gap-5 self-start">
               <div className="flex -space-x-3 overflow-hidden p-1">
                 {[1, 2, 3, 4].map(i => (
                   <img key={i} src={`https://i.pravatar.cc/100?u=${i + 80}`} className="w-9 h-9 rounded-full border-2 border-white shadow-sm" alt="user" />
