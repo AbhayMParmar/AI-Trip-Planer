@@ -1,32 +1,16 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "Backend/server.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "frontend/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
-      }
+  "functions": {
+    "Backend/server.js": {
+      "runtime": "@vercel/node"
     }
-  ],
+  },
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "Backend/server.js"
-    },
-    {
-      "source": "/favicon.(ico|svg|png)",
-      "destination": "/favicon.$1"
-    },
-    {
-      "source": "/logo.svg",
-      "destination": "/logo.svg"
+      "destination": "/Backend/server.js"
     },
     {
       "source": "/(.*)",
