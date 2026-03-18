@@ -1,6 +1,0 @@
-﻿[dotenv@17.3.1] injecting env (0) from .env -- tip: ≡ƒöÉ prevent committing .env to code: https://dotenvx.com/precommit
-Starting server initialization...
-Loading routes...
-Routes loaded.
-Server is now listening on 0.0.0.0:5000
-MongoDB connection skipped/failed: Application running in Resilient Mode
