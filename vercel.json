@@ -21,6 +21,14 @@
       "destination": "Backend/server.js"
     },
     {
+      "source": "/favicon.(ico|svg|png)",
+      "destination": "/favicon.$1"
+    },
+    {
+      "source": "/logo.svg",
+      "destination": "/logo.svg"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
