@@ -1,16 +1,19 @@
 {
   "version": 2,
-  "functions": {
-    "Backend/server.js": {
-      "runtime": "nodejs20.x"
-    }
-  },
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "/Backend/server.js"
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/favicon.(ico|svg|png)",
+      "destination": "/favicon.$1"
+    },
+    {
+      "source": "/logo.svg",
+      "destination": "/logo.svg"
     },
     {
       "source": "/(.*)",
