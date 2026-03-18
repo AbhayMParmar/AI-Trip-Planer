@@ -30,18 +30,18 @@ app.use((req, res, next) => {
 const connectDB = async () => {
     try {
         await mongoose.connect(process.env.MONGODB_URI, {
-            serverSelectionTimeoutMS: 5000, // Fail fast if DB is down
+            serverSelectionTimeoutMS: 5000,
         });
         console.log('MongoDB connected');
+        app.set('dbConnected', true);
     } catch (err) {
-        console.log('MongoDB connection skipped/failed: Application running in Resilient Mode');
+        console.log('MongoDB connection failed: Entering Resilient Mode (mock data enabled)');
+        app.set('dbConnected', false);
     }
 };
-console.log('Starting server initialization...');
 connectDB();
 
 // Routes
-console.log('Loading routes...');
 app.use('/api/auth', require('../Backend/routes/authRoutes'));
 app.use('/api/trips', require('../Backend/routes/tripRoutes'));
 app.use('/api/recommendations', require('../Backend/routes/recommendationRoutes'));

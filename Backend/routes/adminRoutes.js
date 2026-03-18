@@ -4,8 +4,8 @@ const User = require('../models/User');
 const Trip = require('../models/Trip');
 
 // Hardcoded Admin Credentials
-const ADMIN_EMAIL = 'admin@tripnova.com';
-const ADMIN_PASSWORD = 'password123'; 
+const ADMIN_EMAIL = 'admin@gmail.com';
+const ADMIN_PASSWORD = 'admin123'; 
 
 // Admin Login Route
 router.post('/login', (req, res) => {

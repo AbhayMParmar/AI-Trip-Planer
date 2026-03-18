@@ -142,7 +142,7 @@ export default function AdminDashboard() {
                                     type="email" 
                                     value={email} onChange={e => setEmail(e.target.value)} required 
                                     className="w-full bg-gray-900 border-none text-white rounded-xl py-4 px-5 focus:ring-2 focus:ring-olive-500 transition-all text-sm font-bold"
-                                    placeholder="admin@tripnova.com"
+                                    placeholder="admin@gmail.com"
                                 />
                             </div>
                             <div>
