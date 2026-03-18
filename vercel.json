@@ -1,23 +1,32 @@
 {
   "version": 2,
+  "functions": {
+    "api/index.js": {
+      "includeFiles": "Backend/**"
+    }
+  },
   "cleanUrls": true,
   "trailingSlash": false,
-  "rewrites": [
+  "routes": [
     {
-      "source": "/api/(.*)",
-      "destination": "/api/index.js"
+      "src": "/api/(.*)",
+      "dest": "/api/index.js"
     },
     {
-      "source": "/favicon.(ico|svg|png)",
-      "destination": "/favicon.$1"
+      "src": "/assets/(.*)",
+      "dest": "/assets/$1"
     },
     {
-      "source": "/logo.svg",
-      "destination": "/logo.svg"
+      "src": "/favicon.(ico|svg|png)",
+      "dest": "/favicon.$1"
     },
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
+      "src": "/logo.svg",
+      "dest": "/logo.svg"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
     }
   ]
 }
