@@ -37,11 +37,26 @@ export default function Profile() {
 
     const fetchStats = async () => {
         try {
+            // Count total expeditions (trips)
             const tripsQuery = query(collection(db, 'trips'), where('userId', '==', user.uid));
             const tripsSnapshot = await getDocs(tripsQuery);
+            
+            // Count favorited trips
+            const favTripsQuery = query(
+                collection(db, 'trips'), 
+                where('userId', '==', user.uid),
+                where('isFavorite', '==', true)
+            );
+            const favTripsSnapshot = await getDocs(favTripsQuery);
+
+            // Count saved places/meals
             const savedQuery = query(collection(db, 'favorites'), where('userId', '==', user.uid));
             const savedSnapshot = await getDocs(savedQuery);
-            setStats({ trips: tripsSnapshot.size, saved: savedSnapshot.size });
+            
+            setStats({ 
+                trips: tripsSnapshot.size, 
+                saved: favTripsSnapshot.size + savedSnapshot.size 
+            });
         } catch (error) {
             console.error("Stats fetch error:", error);
         }

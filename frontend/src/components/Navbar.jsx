@@ -105,16 +105,11 @@ export default function Navbar() {
                                 transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
                                 className="absolute inset-0 bg-gradient-to-tr from-[#556B2F] to-olive-200 rounded-[1rem] md:rounded-[1.2rem] opacity-30 blur-md group-hover:opacity-60 transition-all duration-700"
                             />
-                            <div className="absolute inset-0 bg-slate-900 rounded-[1rem] md:rounded-[1.2rem] flex items-center justify-center shadow-2xl group-hover:-translate-y-1 group-hover:shadow-[#556B2F]/20 transition-all duration-500 overflow-hidden">
-                                <motion.div 
-                                    animate={{ scale: [1, 1.3, 1], opacity: [0.5, 1, 0.5] }}
-                                    transition={{ duration: 3, repeat: Infinity }}
-                                    className="w-2 md:w-2.5 h-2 md:h-2.5 rounded-full bg-[#556B2F] shadow-[0_0_20px_#556B2F]"
-                                />
-                                <motion.div 
-                                    animate={{ x: [-100, 100] }}
-                                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-12"
+                            <div className="absolute inset-0 flex items-center justify-center transition-all duration-500">
+                                <img 
+                                    src="/logo.svg" 
+                                    alt="TripNova logo" 
+                                    className="w-full h-full object-contain filter drop-shadow-lg group-hover:scale-105 transition-all duration-500"
                                 />
                             </div>
                         </div>

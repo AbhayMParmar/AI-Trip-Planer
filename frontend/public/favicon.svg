@@ -1,0 +1,16 @@
+<svg width="64" height="64" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Solid, High-Contrast Background Circle (Optimized for Browser Tabs) -->
+  <circle cx="256" cy="256" r="250" fill="#2D3A18" /> <!-- Deeper Olive for base -->
+  <circle cx="256" cy="256" r="230" fill="#556B2F" stroke="white" stroke-width="8" />
+  
+  <!-- Bold "TN" Monogram in White (Maximum Visibility) -->
+  <g stroke="white" stroke-width="48" stroke-linecap="round" stroke-linejoin="round">
+    <!-- THE 'T' -->
+    <path d="M140 160 H230 V400" />
+    <!-- THE 'N' -->
+    <path d="M230 160 L350 400 V160" />
+  </g>
+
+  <!-- Glowing Neural Node (Single Highpoint) -->
+  <circle cx="140" cy="160" r="15" fill="white" />
+</svg>

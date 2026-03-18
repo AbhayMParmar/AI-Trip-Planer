@@ -138,20 +138,29 @@ IMPORTANT: You must act as a LOCAL EXPERT and VETERAN TRAVELER. For the destinat
 DO NOT hallucinate places. If the destination is popular (like Mumbai, London, Paris, etc.), use the most iconic spots (e.g., Marine Drive for Mumbai, Eiffel Tower for Paris). If it's a niche location, use verified local gems.
 
     ${budget ? `A budget of ₹${budget} has been specified.` : 'No specific constraints were provided.'} 
-    Please calculate a highly accurate REALISTIC ESTIMATED BUDGET in INR for this entire trip. 
-    Even if a budget was provided, provide your own expert estimation based on current market trends for ${destination}, Travel Style (${style}), and travelers count.
+    CRITICAL: You must provide a highly accurate, REALISTIC, and market-verified ESTIMATED BUDGET in INR for this entire trip.
+    DO NOT provide generic or "fake" round numbers (like exactly 10,000) unless it is truly realistic.
+    Base your estimation on current 2024-2025 market trends for ${destination}, considering the Travel Style (${style}) and the number of travelers (${travelers.adults} adults, ${travelers.children} children).
+    Ensure the "totalEstimatedCost" is a precise calculation including all items like lodging, meals, transport, and activity fees.
     Provide the final total in the "totalEstimatedCost" field as a numerical value (integer).
 
 IMPORTANT: Each day MUST have a distinct, unique theme to avoid repetition. Ensure the activities and descriptions reflect these unique daily focuses with specific, real local names.
 
-IMPORTANT FOR PRICING:
-- For each meal in the 'meals' section, include a 'cost' field with a realistic approximate cost in INR (e.g., 450). DO NOT use the same price for all restaurants; vary them based on the restaurant's quality and cuisine.
-- For each hotel in 'accommodations', include a 'pricePerNight' field with a realistic approximate cost in INR (e.g., 5150). All prices must be integers representing INR. DO NOT include the currency symbol (₹) in the JSON values.
+BUDGET SYNTHESIS PARAMETERS:
+- LOW BUDGET (BACKPACKER): Focus on hostels, street food, and free/low-cost public landmarks.
+- MEDIUM BUDGET (COMFORT): Focus on 3-star boutique hotels, casual dining, and a mix of paid/free landmarks.
+- HIGH BUDGET (LUXURY): Focus on 5-star resorts, private transport, fine dining, and premium experiences.
+
+IMPORTANT FOR PRICING (Strictly follow values for ${style.toUpperCase()} style):
+- For each meal, include a 'cost' field (INR). For BACKPACKER: ₹100-₹350, COMFORT: ₹400-₹1000, LUXURY: ₹1500+.
+- For each hotel/stay, include 'pricePerNight' (INR). For BACKPACKER: ₹500-₹2000, COMFORT: ₹3000-₹7000, LUXURY: ₹12000+.
+- Total: The "totalEstimatedCost" must reflect the chosen tier's economic reality.
 
 Return the result as a JSON object with the following structure:
 {
   "tripName": "A catchy name for the trip",
   "totalEstimatedCost": "Total cost in INR",
+  "budgetLevel": "Low / Medium / High Budget",
   "destination": "${destination}",
   "duration": "${duration} Days",
   "days": [

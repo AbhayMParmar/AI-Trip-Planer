@@ -1,0 +1,50 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="tn_grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#556B2F"/>
+      <stop offset="100%" stop-color="#0D2D2D"/>
+    </linearGradient>
+    <filter id="glow_tn" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Premium Outer Frame (Minimal Circle) -->
+  <circle cx="256" cy="256" r="240" stroke="#556B2F" stroke-width="2" stroke-opacity="0.2" fill-opacity="0.05" fill="#556B2F"/>
+  
+  <!-- "TN" Monogram Design -->
+  <g filter="url(#glow_tn)">
+    <!-- THE 'T' PART -->
+    <path d="M120 160H220V400" stroke="url(#tn_grad)" stroke-width="32" stroke-linecap="round" stroke-linejoin="round"/>
+    
+    <!-- THE 'N' PART (Interconnected with the T's crossbar) -->
+    <path d="M220 160L320 400V160" stroke="#556B2F" stroke-width="32" stroke-linecap="round" stroke-linejoin="round">
+        <animate attributeName="stroke-dasharray" values="0 800; 800 800" dur="4s" repeatCount="indefinite" />
+    </path>
+
+    <!-- Precise AI Nodes (Glowing Terminals) -->
+    <circle cx="120" cy="160" r="10" fill="white">
+        <animate attributeName="r" values="8;12;8" dur="2s" repeatCount="indefinite" />
+    </circle>
+    <circle cx="220" cy="400" r="10" fill="white">
+        <animate attributeName="r" values="8;12;8" dur="2s" delay="0.5s" repeatCount="indefinite" />
+    </circle>
+    <circle cx="320" cy="400" r="10" fill="white">
+        <animate attributeName="r" values="8;12;8" dur="2s" delay="1s" repeatCount="indefinite" />
+    </circle>
+    <circle cx="320" cy="160" r="10" fill="white">
+        <animate attributeName="r" values="8;12;8" dur="2s" delay="1.5s" repeatCount="indefinite" />
+    </circle>
+
+    <!-- A Small, Sleek Moving Airplane indicator on the N's diagonal -->
+    <g>
+        <animateMotion path="M220 160L320 400" dur="4s" repeatCount="indefinite" rotate="auto" />
+        <path d="M-8 -4 L8 0 L-8 4 L-4 0 Z" fill="white" />
+    </g>
+  </g>
+
+  <!-- Text Slogan (Curved or Minimal) -->
+  <text x="256" y="460" text-anchor="middle" fill="#556B2F" font-family="Arial, sans-serif" font-weight="900" font-size="24" letter-spacing="8" opacity="0.6">NEURAL NOVA</text>
+  
+</svg>

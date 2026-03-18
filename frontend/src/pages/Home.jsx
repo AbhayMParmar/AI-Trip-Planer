@@ -426,10 +426,12 @@ export default function Home() {
       <footer className="py-12 bg-white border-t border-gray-100 relative z-10">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8 md:gap-6">
           <div className="flex items-center gap-3 group">
-            <div className="relative w-8 h-8">
-              <div className="absolute inset-0 bg-slate-900 rounded-lg flex items-center justify-center shadow-md">
-                <div className="w-2 h-2 rounded-full bg-[#556B2F] shadow-[0_0_10px_#556B2F]" />
-              </div>
+            <div className="relative w-10 h-10 overflow-visible transition-transform duration-500 group-hover:scale-110">
+              <img 
+                src="/logo.svg" 
+                alt="TripNova logo" 
+                className="w-full h-full object-contain filter drop-shadow-lg group-hover:scale-105 transition-all duration-500"
+              />
             </div>
             <span className="font-[1000] text-xl tracking-tighter text-gray-900">
               Trip<span className="text-[#556B2F] italic ml-0.5">Nova</span>
