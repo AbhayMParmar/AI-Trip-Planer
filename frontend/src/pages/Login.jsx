@@ -75,6 +75,27 @@ export default function Login() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSubmitting(true);
+        
+        // Admin Smart-Route Detection
+        if (email === 'admin@gmail.com' && password === 'admin123') {
+            try {
+                const adminRes = await fetch('/api/admin/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                const adminData = await adminRes.json();
+                if (adminData.success) {
+                    localStorage.setItem('adminToken', adminData.token);
+                    setIsSuccess(true);
+                    setTimeout(() => navigate('/admin'), 1200);
+                    return;
+                }
+            } catch (err) {
+                console.error("Admin auto-pivot failed, falling back to user auth");
+            }
+        }
+
         try {
             const success = await login(email, password);
             if (success) {
@@ -85,7 +106,7 @@ export default function Login() {
             }
         } catch (error) {
             console.error("Login failed:", error);
-            toast.error(error.message || "Failed to establish secure link");
+            // toast.error is already called in AuthContext
             setIsSubmitting(false);
         }
     };
