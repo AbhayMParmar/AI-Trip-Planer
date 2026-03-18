@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "concurrently \"npm run dev --prefix Backend\" \"npm run dev --prefix frontend\"",
-    "build": "cd frontend && npm install && npm run build && cp -r dist/* ..",
+    "build": "cd frontend && npm install && npm run build && cd .. && rm -rf dist && mv frontend/dist ./dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
