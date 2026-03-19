@@ -407,7 +407,7 @@ export default function AIAssistant() {
                 <div className="absolute bottom-[-5%] left-[-5%] w-[500px] h-[500px] bg-slate-500/5 rounded-full blur-[100px]" />
             </div>
 
-            <header className="px-2 md:px-6 py-1 md:py-3 relative z-[100]">
+            <header className="sticky top-0 w-full px-2 md:px-6 py-1 md:py-3 z-[150] bg-[#FBFCFE]/80 backdrop-blur-xl border-b border-white/20">
                 <nav className="max-w-[1400px] mx-auto flex items-center justify-between px-3 md:px-7 py-2 md:py-3 rounded-2xl md:rounded-[2.5rem] border bg-white/40 backdrop-blur-3xl border-white/30 shadow-sm transition-all duration-500 hover:shadow-[0_8px_32px_rgba(0,0,0,0.08)] hover:bg-white/60 hover:border-white/50 group/nav">
                     <div className="flex items-center gap-2 md:gap-6 w-full md:w-auto">
 
@@ -507,7 +507,7 @@ export default function AIAssistant() {
                     * { -ms-overflow-style: none !important; scrollbar-width: none !important; }
                 `}} />
 
-                <div className="max-w-4xl mx-auto px-4 md:px-10 py-1 h-full flex flex-col">
+                <div className="max-w-4xl mx-auto px-4 md:px-10 h-full flex flex-col">
                     <AnimatePresence mode="popLayout">
                         {messages.length === 0 ? (
                             <motion.div
