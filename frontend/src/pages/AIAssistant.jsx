@@ -60,6 +60,19 @@ export default function AIAssistant() {
     const [isFold5, setIsFold5] = useState(false);
 
     useEffect(() => {
+        // Strict Body Scroll Lock for Mobile App feel
+        document.body.style.overflow = 'hidden';
+        document.body.style.position = 'fixed';
+        document.body.style.width = '100%';
+        document.body.style.height = '100%';
+        
+        return () => {
+            document.body.style.overflow = 'unset';
+            document.body.style.position = 'unset';
+        };
+    }, []);
+
+    useEffect(() => {
         const checkFold5 = () => {
             setIsFold5(window.innerWidth === 768 && window.innerHeight === 912);
         };
@@ -486,8 +499,8 @@ export default function AIAssistant() {
                 </nav>
             </header>
 
-            {/* Interaction Layer */}
-            <div className={`flex-1 ${messages.length === 0 ? 'overflow-hidden' : 'overflow-y-auto'} no-scrollbar relative z-10 scroll-smooth`}>
+            {/* Interaction Layer - Rigid Scrolling Content */}
+            <main className={`flex-1 ${messages.length === 0 ? 'overflow-hidden' : 'overflow-y-auto'} no-scrollbar relative z-10 scroll-smooth`}>
                 <style dangerouslySetInnerHTML={{
                     __html: `
                     *::-webkit-scrollbar { display: none !important; }
@@ -593,7 +606,7 @@ export default function AIAssistant() {
                         )}
                     </AnimatePresence>
                 </div>
-            </div>
+            </main>
 
             <div className="px-4 md:px-8 py-4 md:py-6 bg-white md:bg-transparent border-t border-slate-100 md:border-none relative md:relative z-[100] pb-[calc(1rem+env(safe-area-inset-bottom))] md:pb-6">
                 <div className="max-w-4xl mx-auto relative group pb-1 md:pb-0">
@@ -657,7 +670,7 @@ export default function AIAssistant() {
 
                     <form
                         onSubmit={handleSend}
-                        className="relative bg-white border-[2px] md:border-[3px] border-slate-100 shadow-[0_20px_60px_-20px_rgba(0,0,0,0.08)] md:shadow-[0_40px_100px_-30px_rgba(0,0,0,0.1)] rounded-2xl md:rounded-[3rem] p-1.5 md:p-2.5 flex items-center gap-2 md:gap-3 transition-all focus-within:border-[#556B2F]/30 group/input"
+                        className="relative flex items-center gap-2 md:gap-4 transition-all"
                     >
                         <input
                             type="file"
@@ -666,55 +679,47 @@ export default function AIAssistant() {
                             onChange={handleFileChange}
                             accept="image/*,application/pdf,.doc,.docx,.txt"
                         />
-                        <div className="flex items-center gap-1 md:gap-1.5 pl-0.5 md:pl-3">
-                            <button
-                                type="button"
-                                onClick={() => fileInputRef.current.click()}
-                                className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-[1.5rem] flex items-center justify-center text-slate-400 hover:text-[#556B2F] hover:bg-slate-50 transition-all border border-slate-100 group-focus-within/input:border-[#556B2F]/20"
-                                title="Attach"
-                            >
-                                <PlusIcon className="w-5 h-5 md:w-6 md:h-6 stroke-[3px]" />
-                            </button>
+                        
+                        {/* Plus Button - Mobile Optimized */}
+                        <button
+                            type="button"
+                            onClick={() => fileInputRef.current.click()}
+                            className="w-10 h-10 md:w-14 md:h-14 rounded-full flex items-center justify-center bg-slate-100 text-slate-800 hover:bg-slate-200 transition-all shrink-0 shadow-sm border border-slate-200/50"
+                            title="Attach Mission Data"
+                        >
+                            <PlusIcon className="w-5 h-5 md:w-7 md:h-7 stroke-[3px]" />
+                        </button>
 
-                            <div className="hidden sm:block h-6 w-px bg-slate-100 mx-1 md:mx-2" />
-
-                            <button
-                                type="button"
-                                onClick={() => setShowModelMenu(!showModelMenu)}
-                                className="hidden sm:flex items-center gap-2 px-3 md:px-5 h-10 md:h-12 rounded-xl md:rounded-[1.5rem] text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 hover:text-slate-900 transition-all border border-slate-100 whitespace-nowrap bg-slate-50/30"
-                            >
-                                <CommandLineIcon className="w-4 h-4" />
-                                <span>{selectedModel.split(' ')[0]}</span>
-                                <ChevronUpIcon className="w-3.5 h-3.5" />
-                            </button>
-                        </div>
-
-                        <input
-                            type="text"
-                            placeholder="Message..."
-                            className="flex-1 py-2.5 md:py-4 px-1.5 md:px-3 text-sm md:text-lg font-bold bg-transparent border-none focus:outline-none placeholder:text-slate-300 text-slate-900"
-                            value={message}
-                            onChange={(e) => setMessage(e.target.value)}
-                        />
-                        <div className="flex items-center gap-1 md:gap-2 pr-1 md:pr-2">
+                        <div className="flex-1 relative flex items-center group/input">
+                            <input
+                                type="text"
+                                placeholder="Neural Input Active..."
+                                className="w-full bg-slate-100/80 md:bg-white border-[2px] border-slate-200/50 md:border-slate-100 rounded-[1.5rem] md:rounded-[3rem] py-3 md:py-5 pl-4 md:pl-8 pr-12 md:pr-14 text-sm md:text-lg font-bold focus:outline-none focus:ring-2 focus:ring-slate-900/5 focus:bg-white transition-all placeholder:text-slate-400 text-slate-900 shadow-sm"
+                                value={message}
+                                onChange={(e) => setMessage(e.target.value)}
+                            />
+                            
+                            {/* Inner Mic Icon */}
                             <button
                                 type="button"
                                 onClick={toggleRecording}
-                                className={`w-10 h-10 md:w-12 md:h-12 flex items-center justify-center transition-all rounded-xl md:rounded-[1.5rem] border ${isRecording ? 'bg-slate-100 text-[#556B2F] animate-pulse border-white shadow-lg' : 'text-slate-400 hover:text-slate-600 border-transparent hover:bg-slate-50'}`}
+                                className={`absolute right-2 md:right-4 w-8 h-8 md:w-10 md:h-10 flex items-center justify-center transition-all rounded-full ${isRecording ? 'text-red-500 scale-125' : 'text-slate-400 hover:text-slate-600'}`}
                             >
-                                <MicrophoneIcon className={`w-4 h-4 md:w-5 md:h-5 ${isRecording ? 'fill-current' : ''}`} />
-                            </button>
-                            <button
-                                type="submit"
-                                disabled={(!message.trim() && !selectedFile) || isLoading}
-                                className={`w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-[1.8rem] flex items-center justify-center shadow-2xl active:scale-95 flex-shrink-0 ${(message.trim() || selectedFile) && !isLoading
-                                    ? 'bg-slate-900 text-white shadow-slate-900/30'
-                                    : 'bg-slate-50 text-slate-200'
-                                    }`}
-                            >
-                                <PaperAirplaneIcon className="w-4 h-4 md:w-6 md:h-6 -rotate-45 transition-transform" />
+                                <MicrophoneIcon className={`w-4 h-4 md:w-6 md:h-6 ${isRecording ? 'fill-current' : ''}`} />
                             </button>
                         </div>
+
+                        {/* Send Button - Distinct & Reliable */}
+                        <button
+                            type="submit"
+                            disabled={(!message.trim() && !selectedFile) || isLoading}
+                            className={`w-10 h-10 md:w-14 md:h-14 rounded-full flex items-center justify-center shadow-xl active:scale-90 transition-all shrink-0 ${(message.trim() || selectedFile) && !isLoading
+                                ? 'bg-slate-900 text-white'
+                                : 'bg-slate-200 text-slate-400 shadow-none'
+                                }`}
+                        >
+                            <PaperAirplaneIcon className={`w-4 h-4 md:w-7 md:h-7 -rotate-45 transition-transform ${message.trim() ? 'translate-x-0.5 -translate-y-0.5' : ''}`} />
+                        </button>
                     </form>
                     <p className="hidden md:block text-[9px] text-center mt-4 text-slate-300 font-black uppercase tracking-[0.4em] lg:tracking-[0.8em] opacity-30">
                         Neural Concierge Interface • Synthesis Active
