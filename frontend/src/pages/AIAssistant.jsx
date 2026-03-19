@@ -280,7 +280,7 @@ export default function AIAssistant() {
     };
 
     return (
-        <div className="h-screen w-screen flex bg-[#FBFCFE] overflow-hidden relative">
+        <div className="h-screen h-[100dvh] w-screen flex bg-[#FBFCFE] overflow-hidden relative">
             {/* Sidebar Backdrop (Mobile Only) */}
             <AnimatePresence>
                 {sidebarOpen && windowWidth < 768 && (
@@ -385,7 +385,7 @@ export default function AIAssistant() {
                 </Link>
             </motion.aside>
 
-            <div className="flex-1 flex flex-col h-screen overflow-hidden relative">
+            <div className="flex-1 flex flex-col h-screen h-[100dvh] overflow-hidden relative">
 
 
             {/* Ambient Background Glows */}
@@ -394,7 +394,7 @@ export default function AIAssistant() {
                 <div className="absolute bottom-[-5%] left-[-5%] w-[500px] h-[500px] bg-slate-500/5 rounded-full blur-[100px]" />
             </div>
 
-            <header className="px-3 md:px-6 py-1.5 md:py-3 relative z-[100]">
+            <header className="px-2 md:px-6 py-1 md:py-3 relative z-[100]">
                 <nav className="max-w-[1400px] mx-auto flex items-center justify-between px-3 md:px-7 py-2 md:py-3 rounded-2xl md:rounded-[2.5rem] border bg-white/40 backdrop-blur-3xl border-white/30 shadow-sm transition-all duration-500 hover:shadow-[0_8px_32px_rgba(0,0,0,0.08)] hover:bg-white/60 hover:border-white/50 group/nav">
                     <div className="flex items-center gap-2 md:gap-6 w-full md:w-auto">
 
@@ -516,7 +516,7 @@ export default function AIAssistant() {
                                     </div>
                                 </div>
 
-                                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 w-full max-w-[1400px] px-2 md:px-0 pb-24 md:pb-20">
+                                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 w-full max-w-[1400px] px-2 md:px-0 pb-10 md:pb-20">
                                     {[
                                         "Architect a 7-day immersion in Japanese culture.",
                                         "Reveal the encrypted hidden gems of Lisbon.",
@@ -595,7 +595,7 @@ export default function AIAssistant() {
                 </div>
             </div>
 
-            <div className="px-4 md:px-8 py-6 bg-transparent relative z-[100]">
+            <div className="px-4 md:px-8 py-3 md:py-6 bg-transparent relative z-[100]">
                 <div className="max-w-4xl mx-auto relative group pb-1 md:pb-0">
                     <AnimatePresence>
                         {showModelMenu && (

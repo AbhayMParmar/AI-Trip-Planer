@@ -26,20 +26,31 @@ app.use((req, res, next) => {
     next();
 });
 
-// Database connection (Non-blocking for faster startup)
+// Database connection (Global caching for serverless environments)
+let isConnected = false;
 const connectDB = async () => {
+    if (isConnected) {
+        if (!app.get('dbConnected')) app.set('dbConnected', true);
+        return;
+    }
     try {
         await mongoose.connect(process.env.MONGODB_URI, {
             serverSelectionTimeoutMS: 5000,
         });
         console.log('MongoDB connected');
+        isConnected = true;
         app.set('dbConnected', true);
     } catch (err) {
-        console.log('MongoDB connection failed: Entering Resilient Mode (mock data enabled)');
+        console.log('MongoDB connection failed: Entering Resilient Mode (mock data enabled)', err.message);
         app.set('dbConnected', false);
     }
 };
-connectDB();
+
+// Middleware to ensure DB connection
+app.use(async (req, res, next) => {
+    await connectDB();
+    next();
+});
 
 // Routes
 app.use('/api/auth', require('../Backend/routes/authRoutes'));

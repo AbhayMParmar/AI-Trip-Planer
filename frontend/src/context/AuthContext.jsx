@@ -24,15 +24,32 @@ export const AuthProvider = ({ children }) => {
         const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
             if (firebaseUser) {
                 // Fetch additional user data from Firestore
-                const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
+                let userDocRef = doc(db, 'users', firebaseUser.uid);
+                let userDoc = await getDoc(userDocRef);
+                
+                // If it's a social login (Google) and record doesn't exist, create it automatically
+                if (!userDoc.exists() && firebaseUser.providerData.some(p => p.providerId === 'google.com')) {
+                    const newUserObj = {
+                        name: firebaseUser.displayName || firebaseUser.email.split('@')[0],
+                        email: firebaseUser.email,
+                        preferences: {
+                            budget: 'moderate',
+                            travelStyle: 'cultural',
+                            interests: [],
+                            aiModel: 'gemini'
+                        },
+                        createdAt: new Date().toISOString(),
+                        authProvider: 'google'
+                    };
+                    await setDoc(userDocRef, newUserObj);
+                    userDoc = await getDoc(userDocRef); // refresh userDoc after creation
+                }
+
                 let backendToken = localStorage.getItem('token');
 
                 // Proactively get token if missing
                 if (!backendToken) {
                     try {
-                        const controller = new AbortController();
-                        const timeoutId = setTimeout(() => controller.abort(), 15000); // 15s timeout
-
                         const res = await fetch('/api/auth/firebase-login', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
@@ -40,11 +57,8 @@ export const AuthProvider = ({ children }) => {
                                 email: firebaseUser.email,
                                 name: firebaseUser.displayName || firebaseUser.email.split('@')[0],
                                 firebaseUid: firebaseUser.uid
-                            }),
-                            signal: controller.signal
+                            })
                         });
-
-                        clearTimeout(timeoutId);
 
                         if (res.ok) {
                             const data = await res.json();
@@ -52,7 +66,7 @@ export const AuthProvider = ({ children }) => {
                             localStorage.setItem('token', backendToken);
                         }
                     } catch (err) {
-                        console.error("Token sync failed:", err.name === 'AbortError' ? 'Timeout' : err.message);
+                        console.error("Token sync failed:", err.message);
                     }
                 }
 
