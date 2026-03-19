@@ -280,7 +280,7 @@ export default function AIAssistant() {
     };
 
     return (
-        <div className="h-screen h-[100dvh] w-screen flex bg-[#FBFCFE] overflow-hidden relative">
+        <div className="fixed inset-0 w-screen flex bg-[#FBFCFE] overflow-hidden">
             {/* Sidebar Backdrop (Mobile Only) */}
             <AnimatePresence>
                 {sidebarOpen && windowWidth < 768 && (
@@ -385,7 +385,7 @@ export default function AIAssistant() {
                 </Link>
             </motion.aside>
 
-            <div className="flex-1 flex flex-col h-screen h-[100dvh] overflow-hidden relative">
+            <div className="flex-1 flex flex-col h-full overflow-hidden relative">
 
 
             {/* Ambient Background Glows */}
@@ -588,14 +588,14 @@ export default function AIAssistant() {
                                         </div>
                                     </div>
                                 )}
-                                <div ref={scrollRef} className="h-1 text-transparent">.</div>
+                                <div ref={scrollRef} className="h-20 md:h-1 text-transparent">.</div>
                             </div>
                         )}
                     </AnimatePresence>
                 </div>
             </div>
 
-            <div className="px-4 md:px-8 py-3 md:py-6 bg-transparent relative z-[100]">
+            <div className="px-4 md:px-8 py-4 md:py-6 bg-white md:bg-transparent border-t border-slate-100 md:border-none relative md:relative z-[100] pb-[calc(1rem+env(safe-area-inset-bottom))] md:pb-6">
                 <div className="max-w-4xl mx-auto relative group pb-1 md:pb-0">
                     <AnimatePresence>
                         {showModelMenu && (
